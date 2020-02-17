@@ -653,11 +653,14 @@ for iter_val in range(1, iter_lim):
                 edges[int(np.round(contour[c_idx, 0])), int(np.round(contour[c_idx, 1]))] = 1
 
         # Calculate the gradient w.r.t spline control parameters
+        '''
         grad_spline = np.zeros(Pij.shape)
         for x_idx in range(n_x+1):
             for y_idx in range(n_y+1):
                 spline_mat = np.outer(N_x[x_idx], N_y[y_idx])
                 grad_spline[x_idx, y_idx] = (grad_tempor*edges*spline_mat).sum()
+        '''
+        grad_spline = np.matmul(N_y, np.matmul((grad_tempor*edges), N_x.transpose()))
 
         # Update the spline control parameters
         if not (iter_val % 10):
