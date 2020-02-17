@@ -285,12 +285,15 @@ for iter = 1:iter_lim  %training iteration
         
         %calculating teh gradient w.r.t spline control parameters
         grad_tempor = grad_tempor(floor(Nx/2)+(-100:100),floor(Ny/2)+(-50:50));
+	%{
         for ix = 1:nx+1
             for jy = 1:ny+1
                 spline_mat = (Nikx(ix,:).'*Njky(jy,:));
                 grad_spline(ix,jy) = sum(sum(grad_tempor.*edges.*spline_mat));
             end
         end
+	%}
+	grad_spline = Njky*(grad_tempor.*edges)*Nikx.';
         
         Pij = Pij - lr{m}*grad_spline;
         Pij = Pij/(max(abs(Pij(:))));   %for stability of the process
